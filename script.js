@@ -163,7 +163,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 name: 'Xel\'thar Nyx – The Fearborn Phantom',
                 universeId: 'invisible_dominion',
                 img: 'Xel’thar Nyx – The Fearborn Phantom.png',
-                combatStyle: 'Forged from the essence of fear, wielding enigmatic forces.',
+                combatStyle: 'Distorts visibility and perception, creating phantom projections that unravel psyche.',
                 abilities: [
                     'Distorts visibility and perception',
                     'Creates phantom projections that unravel psyche',
@@ -234,27 +234,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const universeSelectionDiv = document.getElementById('universe-selection');
     const characterListDiv = document.getElementById('character-list');
-    // const selectedCharacterInfoDiv = document.getElementById('selected-character-info'); // No longer used for main display
-    const startBattleBtn = document.getElementById('start-battle-btn'); // This button is removed from HTML
     const toggleLoreBtn = document.getElementById('toggle-lore-btn');
     const loreSection = document.getElementById('lore-section');
     const lorePdfFrame = document.getElementById('lore-pdf-frame');
+    const universeLoreDisplay = document.getElementById('universe-lore-display');
+    const universeMechanicsText = document.getElementById('universe-mechanics-text');
 
-    // New Modal Elements
     const characterDetailModal = document.getElementById('character-detail-modal');
     const modalCharacterInfoDiv = document.getElementById('modal-character-info');
     const closeButton = document.querySelector('.close-button');
-    const startBattleModalBtn = document.getElementById('start-battle-modal-btn'); // Button inside the modal
-
+    const startBattleModalBtn = document.getElementById('start-battle-modal-btn');
 
     let currentUniverseId = null;
-    let selectedCharacterId = null; // Will now be used to store ID for modal and battle start
+    let selectedCharacterId = null;
 
-    // Load PDF (assuming it's hosted externally now or not too large)
     if (lorePdfFrame) {
-        // IMPORTANT: If your PDF was too large for GitHub, ensure this points to your externally hosted PDF link!
-        // Example: lorePdfFrame.src = 'YOUR_EXTERNAL_PDF_LINK_HERE';
-        lorePdfFrame.src = 'Ph.D Dissertation By Melvin Sewell.pdf'; // Keep this if you can host it locally/directly
+        lorePdfFrame.src = 'Ph.D Dissertation By Melvin Sewell.pdf';
     }
 
     // Toggle Lore Section
@@ -272,17 +267,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Render Universe Tabs
     function renderUniverseTabs() {
-        universeSelectionDiv.innerHTML = ''; // Clear existing tabs
-        window.gameData.universes.forEach(universe => { // Use window.gameData here
+        universeSelectionDiv.innerHTML = '';
+        window.gameData.universes.forEach(universe => {
             const button = document.createElement('button');
             button.className = 'universe-tab';
             button.dataset.universeId = universe.id;
             button.textContent = universe.name;
 
-            // ACTIVATE THESE LINES to add the background image
-            if (universe.image) { // Only apply if an image path exists
+            if (universe.image) {
                 button.style.backgroundImage = `url('${universe.image}')`;
-                button.classList.add('has-image'); // Add a class for specific image styling
+                button.classList.add('has-image');
             }
 
             button.addEventListener('click', () => {
@@ -295,10 +289,22 @@ document.addEventListener('DOMContentLoaded', () => {
     // Select Universe
     function selectUniverse(universeId) {
         currentUniverseId = universeId;
-        selectedCharacterId = null; // Clear selected character when universe changes
+        selectedCharacterId = null;
         updateUniverseTabs();
         renderCharacterList();
-        // clearCharacterDetails(); // No longer needed as details are in modal
+        displayUniverseLore(universeId);
+    }
+
+    // Display universe lore
+    function displayUniverseLore(universeId) {
+        const universe = window.gameData.universes.find(u => u.id === universeId);
+        if (universe && universe.uniqueMechanics) {
+            universeMechanicsText.textContent = universe.uniqueMechanics;
+            universeLoreDisplay.style.display = 'block';
+        } else {
+            universeMechanicsText.textContent = 'No unique mechanics description available for this universe.';
+            universeLoreDisplay.style.display = 'block';
+        }
     }
 
     // Update Universe Tab Styles
@@ -314,10 +320,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Render Character List for selected universe
     function renderCharacterList() {
-        characterListDiv.innerHTML = ''; // Clear existing characters
+        characterListDiv.innerHTML = '';
         if (!currentUniverseId) return;
 
-        const currentUniverseWarriors = window.gameData.warriors.filter(warrior => warrior.universeId === currentUniverseId); // Use window.gameData
+        const currentUniverseWarriors = window.gameData.warriors.filter(warrior => warrior.universeId === currentUniverseId);
 
         currentUniverseWarriors.forEach(warrior => {
             const characterCard = document.createElement('div');
@@ -332,7 +338,7 @@ document.addEventListener('DOMContentLoaded', () => {
             `;
 
             characterCard.addEventListener('click', () => {
-                selectCharacter(warrior.id); // This will now open the modal
+                selectCharacter(warrior.id);
             });
             characterListDiv.appendChild(characterCard);
         });
@@ -341,9 +347,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // Select Character (Now opens Modal)
     function selectCharacter(characterId) {
         selectedCharacterId = characterId;
-        updateCharacterCards(); // Keep for visual selection on main screen
-        displayCharacterDetailsInModal(); // Display details in the modal
-        characterDetailModal.style.display = 'flex'; // Show the modal (using flex to center)
+        updateCharacterCards();
+        displayCharacterDetailsInModal();
+        characterDetailModal.style.display = 'flex';
     }
 
     // Update Character Card Styles
@@ -383,22 +389,22 @@ document.addEventListener('DOMContentLoaded', () => {
             <ul>${abilitiesList}</ul>
             <p><strong>Signature Move:</strong> ${selectedWarrior.signatureMove}</p>
         `;
-        startBattleModalBtn.disabled = false; // Enable button once details are shown
+        startBattleModalBtn.disabled = false;
     }
 
     // --- Modal Close Logic ---
     closeButton.addEventListener('click', () => {
         characterDetailModal.style.display = 'none';
-        selectedCharacterId = null; // Clear selected character when modal closes
-        updateCharacterCards(); // Remove 'selected' class from card
+        selectedCharacterId = null;
+        updateCharacterCards();
     });
 
     // Close the modal if user clicks outside of modal content
     window.addEventListener('click', (event) => {
         if (event.target === characterDetailModal) {
             characterDetailModal.style.display = 'none';
-            selectedCharacterId = null; // Clear selected character when modal closes
-            updateCharacterCards(); // Remove 'selected' class from card
+            selectedCharacterId = null;
+            updateCharacterCards();
         }
     });
 
@@ -407,7 +413,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (selectedCharacterId) {
             window.location.href = `battle.html?characterId=${selectedCharacterId}`;
         } else {
-            alert('Please select a warrior first!'); // Should not happen if button is disabled correctly
+            alert('Please select a warrior first!');
         }
     });
 
