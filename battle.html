@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TrueFlow Tournament: The Battle</title>
+    <link rel="stylesheet" href="style.css"> </head>
+<body>
+    <div class="container battle-container">
+        <h1>The Battle Arena</h1>
+
+        <div class="battle-display">
+            <div class="player-warrior battle-card" id="player-warrior">
+                <h2>Your Warrior</h2>
+                <img src="" alt="Player Warrior" class="warrior-img">
+                <h3>Name</h3>
+                <div class="health-bar-container">
+                    <div class="health-bar player-health-bar"></div>
+                </div>
+                <span class="health-text" id="player-health-text"></span>
+            </div>
+
+            <div class="vs-text">VS</div>
+
+            <div class="opponent-warrior battle-card" id="opponent-warrior">
+                <h2>Opponent</h2>
+                <img src="" alt="Opponent Warrior" class="warrior-img">
+                <h3>Name</h3>
+                <div class="health-bar-container">
+                    <div class="health-bar opponent-health-bar"></div>
+                </div>
+                <span class="health-text" id="opponent-health-text"></span>
+            </div>
+        </div>
+
+        <div class="battle-actions">
+            <button id="attack-btn">Attack!</button>
+            <button id="return-btn">Return to Selection</button>
+        </div>
+
+        <div class="battle-log" id="battle-log">
+            <h3>Battle Log</h3>
+            <div id="log-content">
+                </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script> <script src="battle.js"></script> </body>
+</html>
